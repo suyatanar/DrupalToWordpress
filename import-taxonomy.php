@@ -3,7 +3,6 @@ $action  = admin_url( 'admin-post.php');
 
 // Category 
 echo "<h2> Category Lists </h2>";
-echo "<p>Import the parent categories first";
 $sql = "SELECT * FROM taxonomy_vocabulary WHERE name='Sections'";
 $result = mysqli_query($conn, $sql);
 
@@ -14,9 +13,7 @@ if (mysqli_num_rows($result) > 0) {
 			<?php // output data of each row
 			while($row = mysqli_fetch_assoc($result)) {
 			?>
-				<input type="radio" name="cats" id="taxonomy" value="parent">Parent Categories
-				&nbsp;&nbsp;&nbsp;&nbsp;
-				<input type="radio" name="cats" id="taxonomy" value="child">Child Categories
+				<input type="checkbox" name="cats" id="taxonomy" value="<?=$row['vid'];?>">Parent Categories
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<?php
 			}
