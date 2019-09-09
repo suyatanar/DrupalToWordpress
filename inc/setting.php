@@ -22,6 +22,9 @@ if (isset($_POST['save'])) {
 // include import category file
 include ( plugin_dir_path( __FILE__ ).'import-category.php');
 
+// include import tag file
+include ( plugin_dir_path( __FILE__ ).'import-tag.php');
+
 function import_data_options_page(){
 	$localhost = $database = $username = $password = NULL;
 	$action  = admin_url( 'admin-post.php');

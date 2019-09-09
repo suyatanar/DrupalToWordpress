@@ -46,6 +46,7 @@ if (mysqli_num_rows($result) > 0) {
 			}
 			?>
 			<input type="submit" name="import-tags" value="Import">
+			<input type="submit" name="empty-tags" value="Delete Data">
 		</form>
 	</div>
 	<?php
