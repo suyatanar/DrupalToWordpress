@@ -31,21 +31,25 @@ function import_data_options_page(){
 		echo "<h1>".$_GET['status']."</h1>";
 	}
 	?>
-	<form action="<?=$action;?>" method="post" class="form-fields" name="dbSetting">
-		<div class="field">
-			Host Name <input type="text" name="localhost" id="localhost" value="<?=($host != NULL) ? $host : '';?>">
-		</div>
-		<div class="field">
-			Database Name <input type="text" name="database" id="database" value="<?=($db_name != NULL) ? $db_name : '';?>">
-		</div>
-		<div class="field">
-			User Name <input type="text" name="username" id="username" value="<?=($db_username != NULL) ? $db_username : '';;?>">
-		</div>
-		<div class="field">
-			Password <input type="text" name="password" id="password" value="<?=($db_password != NULL) ? $db_password : '';;?>">
-		</div>
-		<input type="submit" name="save" value="Save">
-	</form>
+	<div class="drupal-form">
+		<h3>Drupal Database Connection</h3>
+		<form action="<?=$action;?>" method="post" class="form-fields" name="dbSetting">
+			<div class="field">
+				Host Name <input type="text" name="localhost" id="localhost" value="<?=($host != NULL) ? $host : '';?>">
+			</div>
+			<div class="field">
+				Database Name <input type="text" name="database" id="database" value="<?=($db_name != NULL) ? $db_name : '';?>">
+			</div>
+			<div class="field">
+				User Name <input type="text" name="username" id="username" value="<?=($db_username != NULL) ? $db_username : '';;?>">
+			</div>
+			<div class="field">
+				Password <input type="text" name="password" id="password" value="<?=($db_password != NULL) ? $db_password : '';;?>">
+			</div>
+			<input type="submit" name="save" value="Save">
+		</form>
+	</div>
+	
 	<?php
 
 	// Taxonomy Lists
