@@ -13,7 +13,7 @@ if (mysqli_num_rows($result) > 0) {
 			<?php // output data of each row
 			while($row = mysqli_fetch_assoc($result)) {
 			?>
-				<input type="checkbox" name="cats" id="taxonomy" value="<?=$row['vid'];?>">Parent Categories
+				<input type="checkbox" name="cats" id="taxonomy" value="<?=$row['vid'];?>">Categories
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<?php
 			}
