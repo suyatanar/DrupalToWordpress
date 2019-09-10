@@ -1,5 +1,4 @@
 <?php
-
 $row = 1;
 $plugin_dir = plugin_dir_url( __FILE__ );
 $csv_file = $plugin_dir."uploads/user.csv";
@@ -32,7 +31,5 @@ $get_data = array_filter($csv, $c);
 //var_dump($get_data);
 
 foreach ($get_data as $get_data) {
-	var_dump($get_data);
-
-	
+	var_dump($get_data);	
 }

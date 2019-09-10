@@ -1,13 +1,11 @@
 <?php
 $action  = admin_url( 'admin-post.php');
-
 // Post Type 
 echo "<h2> Import posts </h2>";
 $post_types = get_post_types('', 'names');
 $sql = "SELECT type, name FROM node_type";
 $result = mysqli_query($conn, $sql);
 ?>
-
 <div class="post-list">
 	<form class="post-form" method="post" action="<?=$action?>">
 		<select name="drupal_post_type">
@@ -29,5 +27,3 @@ $result = mysqli_query($conn, $sql);
 		<input type="submit" name="empty-post" value="Delete Data">
 	</form>
 </div>
-
-

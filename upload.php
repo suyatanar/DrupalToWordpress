@@ -29,7 +29,6 @@ if(isset($_POST["submit"]) && isset($_FILES["fileToUpload"])) {
     } else {
         if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
             echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
-            //header('Location: ' . $_SERVER['HTTP_REFERER']);
             require_once ('import-user.php');
         } else {
             echo "Sorry, there was an error uploading your file.";
@@ -37,5 +36,3 @@ if(isset($_POST["submit"]) && isset($_FILES["fileToUpload"])) {
     }
 
 }
-
-?>

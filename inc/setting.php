@@ -4,20 +4,24 @@ $localhost = $database = $username = $password = NULL;
 include ( plugin_dir_path( __FILE__ ).'db.php');
 $website_url = $_SERVER['SERVER_NAME'];
 
-if (isset($_POST['save'])) {
-	$localhost = $_POST['localhost'];
-	$database = $_POST['database'];
-	$username = $_POST['username'];
-	$password = $_POST['password'];
-	global $wpdb;
-	$table = $wpdb->prefix.'import_data';
-	$data = array('t_id' => '', 'host_name' => $localhost, 'db_name' => $database, 'db_username' => $username, 'db_password' => $password);
-	$format = array('%d','%s','%s','%s','%s');
-	$wpdb->insert($table,$data,$format);
-	$my_id = $wpdb->insert_id;
+add_action( 'wp_loaded', 'connect_db', 10, 2 );
+function connect_db(){
+	if (isset($_POST['save'])) {
+		$localhost = $_POST['localhost'];
+		$database = $_POST['database'];
+		$username = $_POST['username'];
+		$password = $_POST['password'];
+		global $wpdb;
+		$table = $wpdb->prefix.'import_data';
+		$data = array('t_id' => '', 'host_name' => $localhost, 'db_name' => $database, 'db_username' => $username, 'db_password' => $password);
+		$format = array('%d','%s','%s','%s','%s');
+		$wpdb->insert($table,$data,$format);
+		$my_id = $wpdb->insert_id;
 
-	header('Location: options-general.php?page=import_data&status=Complete');
+		wp_redirect('options-general.php?page=import_data&status=Complete');
+	}
 }
+
 
 // include import category file
 include ( plugin_dir_path( __FILE__ ).'import-category.php');
@@ -44,10 +48,10 @@ function import_data_options_page(){
 // 		'post_author'   => 1,
 // 		'post_category' => array( 8,39 )
 // 	);
-	
+
 // // Insert the post into the database.
 // 	wp_insert_post( $my_post );
-	
+
 	?>
 	<div class="drupal-form">
 		<h3>Drupal Database Connection</h3>
@@ -76,6 +80,3 @@ function import_data_options_page(){
 	include ( plugin_dir_path( __DIR__ ).'import-post.php');
 
 } // end import_data_options_page
-
-
-?>
