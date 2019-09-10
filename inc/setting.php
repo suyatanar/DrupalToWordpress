@@ -25,6 +25,9 @@ include ( plugin_dir_path( __FILE__ ).'import-category.php');
 // include import tag file
 include ( plugin_dir_path( __FILE__ ).'import-tag.php');
 
+// include post query file
+include ( plugin_dir_path( __FILE__ ).'import-post.php');
+
 function import_data_options_page(){
 	$localhost = $database = $username = $password = NULL;
 	$action  = admin_url( 'admin-post.php');
@@ -33,6 +36,18 @@ function import_data_options_page(){
 	if(isset($_GET['status'])){
 		echo "<h1>".$_GET['status']."</h1>";
 	}
+
+// 	$my_post = array(
+// 		'post_title'    => 'My post',
+// 		'post_content'  => 'This is my post.',
+// 		'post_status'   => 'publish',
+// 		'post_author'   => 1,
+// 		'post_category' => array( 8,39 )
+// 	);
+	
+// // Insert the post into the database.
+// 	wp_insert_post( $my_post );
+	
 	?>
 	<div class="drupal-form">
 		<h3>Drupal Database Connection</h3>
@@ -57,6 +72,8 @@ function import_data_options_page(){
 
 	// Taxonomy Lists
 	include ( plugin_dir_path( __DIR__ ).'import-taxonomy.php');
+
+	include ( plugin_dir_path( __DIR__ ).'import-post.php');
 
 } // end import_data_options_page
 

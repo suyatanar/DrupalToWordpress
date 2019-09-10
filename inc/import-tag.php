@@ -58,14 +58,16 @@ if (isset($_POST['import-tags'])) {
 
 if (isset($_POST['empty-tags'])) {
 	global $wpdb;
-	$delete_tags = $wpdb->query(
-		"DELETE t, tr, tt
+	$delete_tags = $wpdb->query('DELETE t, tr, tt
 		FROM wp_terms t  
 		INNER JOIN wp_term_taxonomy tt ON t.term_id = tt.term_id
 		INNER JOIN wp_term_relationships tr ON tt.term_taxonomy_id = tr.term_taxonomy_id
-		WHERE tt.taxonomy = 'post_tag'");
+		WHERE tt.taxonomy = "post_tag"');
 	
 	if ($delete_tags == true) {
 		header('Location: options-general.php?page=import_data&status=Deleted');
+	}
+	else{
+		var_dump($delete_tags);
 	}
 }
