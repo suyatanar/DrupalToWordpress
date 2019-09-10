@@ -4,6 +4,7 @@ $localhost = $database = $username = $password = NULL;
 include ( plugin_dir_path( __FILE__ ).'db.php');
 $website_url = $_SERVER['SERVER_NAME'];
 
+// db information to store at database
 add_action( 'wp_loaded', 'connect_db', 10, 2 );
 function connect_db(){
 	if (isset($_POST['save'])) {
@@ -31,6 +32,9 @@ include ( plugin_dir_path( __FILE__ ).'import-tag.php');
 
 // include post query file
 include ( plugin_dir_path( __FILE__ ).'import-post.php');
+
+// include user query file
+include ( plugin_dir_path( __FILE__ ).'import-user.php');
 
 function import_data_options_page(){
 	$localhost = $database = $username = $password = NULL;
@@ -74,9 +78,9 @@ function import_data_options_page(){
 	
 	<?php
 
-	// Taxonomy Lists
+	// Data list
 	include ( plugin_dir_path( __DIR__ ).'import-taxonomy.php');
-
 	include ( plugin_dir_path( __DIR__ ).'import-post.php');
+	include ( plugin_dir_path( __DIR__ ).'import-user.php');
 
 } // end import_data_options_page
