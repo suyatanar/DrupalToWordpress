@@ -17,8 +17,7 @@ function import_category(){
 			WHERE a.source LIKE 'taxonomy%'
 			AND a.alias NOT LIKE 'tags/%'
 			AND a.alias NOT LIKE '%/%'
-			AND d.vid = '$taxonomy_id'
-			ORDER BY d.tid ASC";
+			AND d.vid = '$taxonomy_id'";
 			$result = mysqli_query($conn, $sql);
 
 			if (mysqli_num_rows($result) > 0) { 
@@ -29,7 +28,7 @@ function import_category(){
 					$cat_url = $row['alias'];
 
 			// Create the category
-					$my_cat = array('cat_name' => $cat_name, 'category_nicename' => $cat_url);
+					$my_cat = array('import_id' => $cat_id, 'cat_name' => $cat_name, 'category_nicename' => $cat_url);
 					$my_cat_id = wp_insert_category($my_cat);
 				}
 
@@ -45,8 +44,7 @@ function import_category(){
 				AND a.alias NOT LIKE 'tags/%'
 				-- AND a.alias NOT LIKE '%/%'
 				AND a.alias LIKE '%/%'
-				AND d.vid = '$taxonomy_id'
-				ORDER BY d.tid ASC";
+				AND d.vid = '$taxonomy_id'";
 				$result = mysqli_query($conn, $sql);
 
 				if (mysqli_num_rows($result) > 0) {
@@ -58,7 +56,7 @@ function import_category(){
 						$split_url = explode('/', $cat_url); // for install sub cat
 						$parent_cat = term_exists($split_url[0]); // for install sub cat
 						// Create the category
-						$my_cat = array('cat_name' => $cat_name, 'category_nicename' => $split_url[1], 'category_parent' => $parent_cat);
+						$my_cat = array('import_id' => $cat_id, 'cat_name' => $cat_name, 'category_nicename' => $split_url[1], 'category_parent' => $parent_cat);
 						$my_cat_id = wp_insert_category($my_cat);
 					}
 
