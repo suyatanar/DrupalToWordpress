@@ -152,3 +152,28 @@ function import_post(){
 		}
 	}
 }
+
+
+
+/**
+ * Deletes all posts from "products" custom post type.
+ */
+function delete_all_post() {
+	if (isset($_POST['empty-post'])) {
+		$all_post = get_posts( array( 
+			'post_type' => 'post',
+			'posts_per_page' => -1
+		) );	
+		//var_dump($all_post);
+		foreach ( $all_post as $post ) {
+	        // Delete all products.
+	       $deleted_post = wp_delete_post( $post->ID, true); // Set to False if you want to send them to Trash.
+	    }
+
+	    if ($deleted_post == true) {
+	     	wp_redirect('options-general.php?page=import_data&status=Deleted');
+	    } 
+	}
+
+}
+add_action( 'wp_loaded', 'delete_all_post', 10, 2 );
