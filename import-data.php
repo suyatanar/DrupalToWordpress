@@ -8,10 +8,18 @@
  * Author URI: #
  */
 ob_start();
+
+define("PLUGIN_MAIN_FILE", __FILE__);
+define("PLUGIN_DIR_PATH_IMP_DATA", plugin_dir_path(__FILE__));
+define("S3_BUCKET_LINK", "https://brides-media-dev.herworld.com/public/");
+define("OFFLOAD_S3_OPTONS", "tantan_wordpress_s3");
+
 require_once(ABSPATH . 'wp-config.php'); 
 require_once(ABSPATH . 'wp-includes/wp-db.php'); 
 require_once(ABSPATH . 'wp-admin/includes/taxonomy.php'); 
 include_once(ABSPATH . 'wp-admin/includes/plugin.php');
+
+require_once(PLUGIN_DIR_PATH_IMP_DATA . 'inc/lib/helper.php'); 
 
 function import_data_register_settings() {
 	add_option( 'import_data_option_name', 'This is my option value.');

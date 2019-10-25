@@ -23,6 +23,32 @@ function connect_db(){
 	}
 }
 
+//Enque our js files
+add_action( 'admin_enqueue_scripts', 'imp_data_my_enqueue' );
+function imp_data_my_enqueue($hook) {
+	if(is_admin() && $hook == "settings_page_import_data"){
+		wp_enqueue_script( 'ajax-script', plugins_url( '/js/import-post-data.js', PLUGIN_MAIN_FILE ), array('jquery') );
+		wp_enqueue_style( 'imp_admin_bootstrap', plugins_url( '/css/bootstrap-3-4-1.css', PLUGIN_MAIN_FILE ));
+
+		// in JavaScript, object properties are accessed as ajax_object.ajax_url, ajax_object.we_value
+		wp_localize_script( 'ajax-script', 'ajax_object',
+			array( 
+				'ajax_url' => admin_url( 'admin-ajax.php' )
+			) 
+		);
+	}
+}
+
+// Same handler function...
+add_action( 'wp_ajax_my_action_import_data', 'my_action_import_data' );
+function my_action_import_data() {
+	global $wpdb;
+	
+	include ( plugin_dir_path( PLUGIN_MAIN_FILE ).'inc/import-post-to-wp.php');
+
+	wp_die();
+}
+
 
 // include import category file
 include ( plugin_dir_path( __FILE__ ).'import-category.php');
@@ -44,17 +70,6 @@ function import_data_options_page(){
 	if(isset($_GET['status'])){
 		echo "<h1>".$_GET['status']."</h1>";
 	}
-
-// 	$my_post = array(
-// 		'post_title'    => 'My post',
-// 		'post_content'  => 'This is my post.',
-// 		'post_status'   => 'publish',
-// 		'post_author'   => 1,
-// 		'post_category' => array( 8,39 )
-// 	);
-
-// // Insert the post into the database.
-// 	wp_insert_post( $my_post );
 
 	?>
 	<div class="drupal-form">
@@ -79,8 +94,14 @@ function import_data_options_page(){
 	<?php
 
 	// Data list
-	include ( plugin_dir_path( __DIR__ ).'import-taxonomy.php');
-	include ( plugin_dir_path( __DIR__ ).'import-post.php');
-	include ( plugin_dir_path( __DIR__ ).'import-user.php');
+	if ($db_config == true) {
+		include ( plugin_dir_path( __DIR__ ).'import-taxonomy.php');
+		include ( plugin_dir_path( __DIR__ ).'import-post.php');
+		include ( plugin_dir_path( __DIR__ ).'import-user.php');
 
+
+		include ( plugin_dir_path( __DIR__ ).'import-post-to-wp.php');
+
+	}
+	
 } // end import_data_options_page
