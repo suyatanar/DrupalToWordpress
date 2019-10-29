@@ -28,16 +28,12 @@ function import_post_to_wp(){
 			'post_type' => 'post',
 			'posts_per_page' => -1,
 			'post_status'	=> array('publish','draft','sticky')
-		) );	
-		//var_dump($all_post);
+		) );
 		foreach ( $all_post as $post ) {
 	        // Delete all products.
 	       $deleted_post = wp_delete_post( $post->ID, true); // Set to False if you want to send them to Trash.
 	    }
 
-	    if ($deleted_post == true) {
-	     	wp_redirect('options-general.php?page=import_data&status=Deleted');
-	    } 
 	}
 }
 

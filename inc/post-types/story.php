@@ -1,30 +1,37 @@
 <?php
-
+$byline = NULL;
 $sql = "SELECT DISTINCT nn.nid AS id,
-nn.uid AS post_author,
 FROM_UNIXTIME(nn.created) AS post_date,
-CONVERT (bb.body_value USING utf8) AS post_content,
+nn.type AS post_type,
+
 nn.title AS post_title,
 sub.field_sub_head_value AS post_excerpt,
-GROUP_CONCAT(IF(d.vid != 4, NUll, d.name)) AS tag, 
+bld.name AS byline,
+CONVERT (bb.body_value USING utf8) AS post_content,
 IF(c.vid = 2, c.name, '') AS category,
-nn.type AS post_type,
-IF(nn.status = 1, 'publish', 'draft') AS post_status,
+GROUP_CONCAT(IF(d.vid != 4, NUll, d.name)) AS tag, 
+
 fileURL.fid AS img_id, 
 fileURL.filename as post_attachment_name, 
 FROM_UNIXTIME(fileURL.timestamp) as post_attachment_date, 
 fileURL.filemime as post_mime_type, 
 fileURL.filesize as post_attachment_filesize,
 (REPLACE(fileURL.uri,'public://', '')) AS post_featured_image,
+
+IF(nn.status = 1, 'publish', 'draft') AS post_status,
+
 u.uid AS user_id, 
 u.mail as post_author,
 u2.mail as post_attachment_author
 FROM
-(SELECT * FROM node WHERE type = 'story' ORDER BY nid DESC limit 100)
+(SELECT * FROM node WHERE type = '".$drupal_post_type."' ORDER BY nid DESC limit 100)
 AS nn
 LEFT JOIN url_alias a ON a.source = concat('node/', nn.nid)
 LEFT JOIN field_data_body bb ON bb.entity_id = nn.nid
 LEFT JOIN field_data_field_sub_head sub ON sub.entity_id = nn.nid
+
+LEFT JOIN field_data_field_story_byline byline ON byline.entity_id = nn.nid
+LEFT JOIN taxonomy_term_data bld ON bld.tid = byline.field_story_byline_tid
 
 LEFT JOIN field_data_field_gallery_media f ON f.field_gallery_media_nid = nn.nid
 LEFT JOIN scheduler sc ON sc.nid = nn.nid
@@ -50,6 +57,7 @@ if (mysqli_num_rows($result) > 0) {
 		$post_date = $row['post_date'];
 		$post_content = $row['post_content'];
 		$post_title = $row['post_title'];
+		$byline = $row['byline'];
 		$post_excerpt = $row['post_excerpt'];
 		$post_type = $wp_post_type;
 		$post_status = $row['post_status'];
@@ -97,10 +105,15 @@ if (mysqli_num_rows($result) > 0) {
 			$attach_id = imp_data_image_attachment_featured($post_id, $featured_image_url, $post_mime_type, $post_attachment_name);
 			imp_data_image_attachment_via_s3($attach_id, $featured_image_url, $post_attachment_filesize);
 
-			wp_redirect('options-general.php?page=import_data&status=Complete');
+			//Custom Fields
+			if ($byline != NULL) {
+				update_field( "field_58b3ebba98180", $byline, $post_id );
+				update_field( "field_58bd28130a596", 0, $post_id );
+			}
+            
 		}
 		else{
-			var_dump($impot_post);
+			wp_die("Error importing the posts");
 		}				
 
 	}
