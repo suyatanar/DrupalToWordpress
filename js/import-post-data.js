@@ -4,6 +4,7 @@ jQuery(function($) {
 
         import_handler();
         delete_handler();
+        mapping_handler();
     })
 
     function import_handler(){
@@ -29,6 +30,27 @@ jQuery(function($) {
 
     function delete_handler(){
         $("#form-delete-post-to-wp").submit(function( event ) {
+
+            console.log(event);
+            var _this = $(this);
+            var _submitted_data = _this.serializeArray();
+            event.preventDefault();
+
+            var values = { 'action': _this.attr('action') };
+            
+            $.each(_submitted_data, function(i, field) {
+                values[field.name] = field.value;
+                console.log(field.value);
+            });
+            
+            imp_data_request_ajax(values);
+
+            return false;
+        });
+    }
+
+    function mapping_handler(){
+        $("#form-mapping").submit(function( event ) {
 
             console.log(event);
             var _this = $(this);

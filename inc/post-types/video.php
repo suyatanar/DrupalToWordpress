@@ -1,5 +1,5 @@
 <?php
-$byline = $sponsored = NULL;
+$byline = $video_url = NULL;
 $sql = "SELECT DISTINCT nn.nid AS id,
 FROM_UNIXTIME(nn.created) AS post_date,
 nn.type AS post_type,
@@ -24,9 +24,10 @@ u.uid AS user_id,
 u.mail as post_author,
 u2.mail as post_attachment_author,
 
+video.field_video_url_video_url AS videoURL,
 sponsored.field_adstory_value AS sponsored
 FROM
-(SELECT * FROM node WHERE type = '".$drupal_post_type."' ORDER BY nid DESC LIMIT 1000)
+(SELECT * FROM node WHERE type = '".$drupal_post_type."' ORDER BY nid DESC)
 AS nn
 LEFT JOIN url_alias a ON a.source = concat('node/', nn.nid)
 LEFT JOIN field_data_body bb ON bb.entity_id = nn.nid
@@ -48,8 +49,8 @@ LEFT JOIN file_managed fileURL ON fileURL.fid = imgFile.field_img_file_fid
 LEFT JOIN users u ON u.uid = nn.uid
 LEFT JOIN users u2 ON u2.uid = fileURL.uid
 
+LEFT JOIN field_data_field_video_url video ON video.entity_id = nn.nid
 LEFT JOIN field_data_field_adstory sponsored ON sponsored.entity_id = nn.nid
-WHERE c.tid = '".$drupal_section."' 
 GROUP BY nn.nid";
 
 $result = mysqli_query($conn, $sql);
@@ -84,8 +85,9 @@ if (mysqli_num_rows($result) > 0) {
 		$post_attachment_filesize = $row['post_attachment_filesize'];
 		$featured_image_url      = $post_featured_image;
 
-		// sponsored
-		$sponsored = $row['sponsored'];
+		// video URL
+		$video_url = $row['videoURL'];
+
 
 		// import post
 		$my_post = array(
@@ -111,14 +113,14 @@ if (mysqli_num_rows($result) > 0) {
 			$attach_id = imp_data_image_attachment_featured($post_id, $featured_image_url, $post_mime_type, $post_attachment_name);
 			imp_data_image_attachment_via_s3($attach_id, $featured_image_url, $post_attachment_filesize);
 
-			// Custom Fields
+			//Custom Fields
 			if ($byline != NULL) {
 				update_field( "field_58b3ebba98180", $byline, $post_id );
 				update_field( "field_58bd28130a596", 0, $post_id );
 			}
 
-			if ($sponsored != NULL) {
-				update_field( "field_5cd25a074d24f", $sponsored, $post_id );
+			if($video_url != NULL){
+				update_field( "field_5caf11b5d8546", $video_url, $post_id );
 			}
             
 		}

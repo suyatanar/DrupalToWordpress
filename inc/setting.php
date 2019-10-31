@@ -101,6 +101,7 @@ function import_data_options_page(){
 
 
 		include ( plugin_dir_path( __DIR__ ).'import-post-to-wp.php');
+		include ( plugin_dir_path( __DIR__ ).'mapping.php');
 
 	}
 	

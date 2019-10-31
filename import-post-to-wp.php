@@ -5,11 +5,15 @@ echo "<h2> Import posts </h2>";
 $post_types = get_post_types('', 'names');
 $sql = "SELECT type, name FROM node_type";
 $result = mysqli_query($conn, $sql);
+
+$dcat = "SELECT * FROM taxonomy_term_data WHERE vid = 2 ORDER BY name ASC";
+$categories = mysqli_query($conn, $dcat);
 ?>
 <div class="post-list">
 	<form class="post-form" method="post" action="my_action_import_data" id="form-import-post-to-wp">
 		<input type="hidden" name="drupal-to-wp-import" value="1">	
 
+		<span>Drupal Post Type </span>
 		<select name="drupal_post_type">
 			<?php
 			if (mysqli_num_rows($result) > 0) {
@@ -20,6 +24,18 @@ $result = mysqli_query($conn, $sql);
 			?>
 		</select>
 
+		<span>Drupal Section</span>
+		<select name="drupal_section">
+			<?php
+			if (mysqli_num_rows($categories) > 0) {
+				while ($row = mysqli_fetch_assoc($categories)) {
+					echo "<option value=" . $row['tid'] . ">" . $row['name'] . "</option>";
+				}
+			}
+			?>
+		</select>
+
+		<span>WordPress Post Type</span>
 		<select name="wp_post_type">
 			<?php foreach ($post_types as $post_type) {
 				echo "<option value=" . $post_type . ">" . $post_type . "</option>";
